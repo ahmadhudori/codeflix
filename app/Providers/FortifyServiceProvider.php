@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -21,7 +23,23 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
+				public function toResponse($request)
+				{
+					return redirect()->route('subscribe.plans');
+				}
+		  });
+
+		  $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+				public function toResponse($request)
+				{
+					if ($request->user()->hasMembershipsPlan()) {
+						return redirect()->intended(config('fortify.home'));
+					}
+
+					return redirect()->route('subscribe.plans');
+				}
+		  });
     }
 
     /**

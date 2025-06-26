@@ -50,4 +50,12 @@ class User extends Authenticatable
 	 {
 		return $this->hasMany(Membership::class);
 	 }
+
+	 public function hasMembershipsPlan(): bool
+	 {
+		return $this->memberships()
+		->where('active', true)
+		->where('end_date', '>=', today())
+		->exists();
+	 }
 }
