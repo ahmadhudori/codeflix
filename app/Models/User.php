@@ -51,11 +51,32 @@ class User extends Authenticatable
 		return $this->hasMany(Membership::class);
 	 }
 
+	 public function devices(): HasMany
+	 {
+		return $this->hasMany(UserDevice::class);
+	 }
+
 	 public function hasMembershipsPlan(): bool
 	 {
 		return $this->memberships()
 		->where('active', true)
 		->where('end_date', '>=', today())
 		->exists();
+	 }
+
+	 public function getCurrentPlan()
+	 {
+		$activeMembership = $this->memberships()
+		->where('active', true)
+		->where('start_date', '<=', today())
+		->where('end_date', '>=', today())
+		->latest()
+		->first();
+
+		if (! $activeMembership) {
+			return null;
+		}
+
+		return $activeMembership->plan;
 	 }
 }
