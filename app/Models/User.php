@@ -77,6 +77,6 @@ class User extends Authenticatable
 			return null;
 		}
 
-		return $activeMembership->plan;
+		// return $activeMembership->plan;
 	 }
 }

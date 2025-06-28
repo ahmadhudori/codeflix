@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserDevice extends Model
 {
-    protected $fillable = [[
+    protected $fillable = [
 		'user_id',
 		'device_name',
 		'device_id',
@@ -17,7 +17,7 @@ class UserDevice extends Model
 		'browser',
 		'browser_version',
 		'last_active',
-	 ]];
+	 ];
 
 	 protected $casts = [
 		'last_active' => 'datetime',
