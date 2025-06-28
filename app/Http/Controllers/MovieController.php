@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Movie;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+
+class MovieController extends Controller implements HasMiddleware
+{
+	public static function middleware()
+	{
+		return [
+			'auth',
+			'checkDeviceLimit'
+		];
+	}
+    public function index()
+	{
+		$latestMovies = Movie::latest()->limit(8)->get();
+		$popularMovie = Movie::with('ratings')->get()->sortByDesc('average_rating')->take(8);
+		return view('movies.index', [
+			'latestMovies' => $latestMovies,
+			'popularMovies' => $popularMovie,
+		]);
+	}
+}
