@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SubscribeController;
 use App\Services\DeviceLimitService;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
-})->middleware(['auth', 'checkDeviceLimit'])->name('home');
+});
 
 
 
@@ -25,4 +26,9 @@ Route::post('/logout', function(Request $request, DeviceLimitService $deviceServ
 	return app(\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class)->destroy($request);
 })->name('logout')->middleware(['auth']);
 
+
 Route::get('/home', [MovieController::class, 'index'])->name('home');
+Route::get('/movies', [MovieController::class, 'all'])->name('movies.all');
+Route::get('/movies/search', [MovieController::class, 'search'])->name('movies.search');
+Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/categories/{category:slug}', [CategoryController::class, 'showByCategoty'])->name('category.show');

@@ -8,7 +8,7 @@
             <ul>
                 @foreach($chunk as $category)
                 <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ route('category.show', $category->slug) }}">
                         {{ $category->title }}
                     </a>
                 </li>
@@ -17,4 +17,5 @@
             @endforeach
         </div>
     </li>
+	<li class="nav-item"><a class="text-white nav-link" href="{{ route('movies.all') }}">All Movies</a> </li>
 </ul>
