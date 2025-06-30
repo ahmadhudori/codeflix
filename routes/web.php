@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SubscribeController;
+use App\Models\Membership;
 use App\Services\DeviceLimitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,9 @@ Route::get('/movies', [MovieController::class, 'all'])->name('movies.all');
 Route::get('/movies/search', [MovieController::class, 'search'])->name('movies.search');
 Route::get('/movies/{movie:slug}', [MovieController::class, 'show'])->name('movies.show');
 Route::get('/categories/{category:slug}', [CategoryController::class, 'showByCategoty'])->name('category.show');
+
+Route::get('test-expired-membership', function () {
+	$membership = Membership::find(4);
+	event(new \App\Events\MembershipHasExpiredEvent($membership));
+	return 'event fired';
+});

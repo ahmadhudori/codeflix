@@ -2,13 +2,18 @@
 
 namespace App\Jobs;
 
+use App\Events\MembershipHasExpiredEvent;
 use App\Models\Membership;
+use Illuminate\Bus\Batchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class CheckMembershipStatus implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, Dispatchable, InteractsWithQueue, SerializesModels, Batchable;
 
 	public $timeout = 120;
 
@@ -32,6 +37,8 @@ class CheckMembershipStatus implements ShouldQueue
 		->chunk(100, function ($memberships) {
 			foreach ($memberships as $membership) {
 				$membership->update(['active' => false]);
+
+				event(new MembershipHasExpiredEvent($membership));
 			}
 		});
     }
