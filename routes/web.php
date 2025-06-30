@@ -7,9 +7,7 @@ use App\Services\DeviceLimitService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-});
+Route::get('/', [MovieController::class, 'index'])->name('home');
 
 
 
