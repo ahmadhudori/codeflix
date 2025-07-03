@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\TransactionController;
 use App\Models\Membership;
 use App\Services\DeviceLimitService;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ Route::get('/subscribe', [SubscribeController::class, 'showPlans'])->name('subsc
 Route::get('/subscribe/plan/{plan}', [SubscribeController::class, 'checkout'])->name('subscribe.checkout');
 Route::post('/subscribe/plan/checkout', [SubscribeController::class, 'checkoutProcess'])->name('subscribe.checkout.process');
 Route::get('/subscribe/success', [SubscribeController::class, 'successCheckout'])->name('subscribe.success');
+
+Route::post('/checkout', [TransactionController::class, 'checkout'])->name('checkout');
 
 Route::post('/logout', function(Request $request, DeviceLimitService $deviceService) {
 	 $deviceId = session('device_id');
