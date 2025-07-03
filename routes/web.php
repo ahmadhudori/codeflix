@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\TransactionController;
 use App\Models\Membership;
@@ -26,7 +27,7 @@ Route::post('/logout', function(Request $request, DeviceLimitService $deviceServ
         $deviceService->logoutDevice($deviceId); // ← ini dijamin jalan sebelum destroy()
     }
 	return app(\Laravel\Fortify\Http\Controllers\AuthenticatedSessionController::class)->destroy($request);
-})->name('logout')->middleware(['auth']);
+})->name('logout')->middleware(['auth', 'logoutDevice']);
 
 
 Route::get('/home', [MovieController::class, 'index'])->name('home');
@@ -40,3 +41,5 @@ Route::get('test-expired-membership', function () {
 	event(new \App\Events\MembershipHasExpiredEvent($membership));
 	return 'event fired';
 });
+
+Route::get('/profile/overview', [ProfileController::class, 'overview'])->name('profile.overview');

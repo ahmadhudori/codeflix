@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Services\DeviceLimitService;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Midtrans\Config;
 use Midtrans\Snap;
 
-class TransactionController extends Controller
+class TransactionController extends Controller implements HasMiddleware
 {
+	
 	protected $deviceService;
+	
+	public static function middleware()
+	{
+		return [
+			'auth',
+		];
+	}
+	
 	
     public function __construct(DeviceLimitService $deviceService)
 	{

@@ -72,7 +72,7 @@
                         <i class="fa-solid fa-user user-icon"></i>
                     </a>
                     <ul class="dropdown-menu user-info">
-                        <li><a class="dropdown-item user-info-item" href="#"><i
+                        <li><a class="dropdown-item user-info-item" href="{{ route('profile.overview') }}"><i
                                     class="fa-solid fa-circle-user"></i> Profile Setting</a></li>
                         <li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
