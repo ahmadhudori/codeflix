@@ -95,25 +95,26 @@ class TransactionController extends Controller
                     $user = $transaction->user;
                     $plan = $transaction->plan;
                     try {
-                        DB::transaction(function () use ($user, $plan, $request, $transaction) {
+                        DB::beginTransaction();
 
-                            // Create membership
-                            $user->memberships()->create([
-                                'plan_id' => $plan->id,
-                                'start_date' => now(),
-                                'end_date' => now()->addDays($plan->duration),
-                                'active' => true,
-                            ]);
+						// Create membership
+						$user->memberships()->create([
+							'plan_id' => $plan->id,
+							'start_date' => now(),
+							'end_date' => now()->addDays($plan->duration),
+							'active' => true,
+						]);
 
-                            // Register device
-                            $this->deviceService->registerDevice($user, $request);
+						// Register device
+						$this->deviceService->registerDevice($user);
 
-                            // Update order status
-                            $transaction->update([
-                                'payment_status' => 'success',
-                                'midtrans_transaction_id' => $request->transaction_id,
-                            ]);
-                        });
+						// Update order status
+						$transaction->update([
+							'payment_status' => 'success',
+							'midtrans_transaction_id' => $request->transaction_id,
+						]);
+
+						DB::commit();
                     } catch (\Exception $e) {
                         Log::error('Failed to process successful payment: ' . $e->getMessage());
                         return response()->json(['status' => 'error', 'message' => 'Failed to process membership'], 500);

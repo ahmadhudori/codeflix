@@ -28,7 +28,7 @@ class DeviceLimitService
 			}
 
 			$device = $this->createNewDevice($user, $deviceInfo);
-			session('device_id', $device->device_id);
+			Session::put('device_id', $device->device_id);
 			return $device;
 	 }
 

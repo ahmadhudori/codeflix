@@ -36,8 +36,7 @@ class CheckDeviceLimit
 
 
 		$sessionDeviceId = Session::get('device_id');
-		$device = UserDevice::where('user_id', $user->id)
-		->where('device_id', $sessionDeviceId)
+		$device = UserDevice::where('device_id', $sessionDeviceId)
 		->first();
 
 		if(!$device) {
